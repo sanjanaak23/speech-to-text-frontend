@@ -90,17 +90,17 @@ function App() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-pink-100 via-rose-50 to-white">
+    <div className="min-h-screen bg-gradient-to-br from-yellow-100 via-amber-50 to-white">
       {/* Header */}
-      <header className="bg-white/80 backdrop-blur-sm border-b border-pink-200 sticky top-0 z-50">
+      <header className="bg-white/80 backdrop-blur-sm border-b border-yellow-200 sticky top-0 z-50">
         <div className="max-w-6xl mx-auto px-4 py-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center space-x-3">
-              <div className="p-2 bg-gradient-to-r from-pink-500 to-rose-500 rounded-xl">
+              <div className="p-2 bg-gradient-to-r from-yellow-500 to-amber-500 rounded-xl">
                 <Sparkles className="w-8 h-8 text-white" />
               </div>
               <div>
-                <h1 className="text-2xl font-bold bg-gradient-to-r from-pink-600 to-rose-600 bg-clip-text text-transparent">
+                <h1 className="text-2xl font-bold bg-gradient-to-r from-yellow-600 to-amber-600 bg-clip-text text-transparent">
                   SpeechCraft AI
                 </h1>
                 <p className="text-sm text-gray-600">Powered by OpenAI Whisper</p>
@@ -125,7 +125,7 @@ function App() {
                 href="https://github.com"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="p-2 hover:bg-pink-100 rounded-full transition-colors duration-200"
+                className="p-2 hover:bg-yellow-100 rounded-full transition-colors duration-200"
               >
                 <Github className="w-5 h-5 text-gray-600" />
               </a>
@@ -147,55 +147,18 @@ function App() {
           </p>
         </div>
 
-        {/* Input Method Tabs */}
-        <div className="flex justify-center mb-8">
-          <div className="bg-white rounded-full p-1 border border-pink-200 shadow-lg">
-            <button
-              onClick={() => {
-                setActiveTab('record');
-                resetState();
-              }}
-              className={`flex items-center space-x-2 px-6 py-3 rounded-full font-semibold transition-all duration-200 ${
-                activeTab === 'record'
-                  ? 'bg-gradient-to-r from-pink-500 to-rose-500 text-white shadow-lg'
-                  : 'text-gray-600 hover:text-pink-600'
-              }`}
-            >
-              <Mic className="w-5 h-5" />
-              <span>Record Audio</span>
-            </button>
-            <button
-              onClick={() => {
-                setActiveTab('upload');
-                resetState();
-              }}
-              className={`flex items-center space-x-2 px-6 py-3 rounded-full font-semibold transition-all duration-200 ${
-                activeTab === 'upload'
-                  ? 'bg-gradient-to-r from-pink-500 to-rose-500 text-white shadow-lg'
-                  : 'text-gray-600 hover:text-pink-600'
-              }`}
-            >
-              <Upload className="w-5 h-5" />
-              <span>Upload File</span>
-            </button>
-          </div>
-        </div>
-
-        {/* Input Section */}
+        {/* Input Section - Both Recording and Upload */}
         <div className="grid lg:grid-cols-2 gap-8 mb-8">
-          <div>
-            {activeTab === 'record' ? (
-              <AudioRecorder
-                onAudioRecorded={handleAudioRecorded}
-                isLoading={isLoading}
-              />
-            ) : (
-              <FileUpload
-                onFileSelected={handleFileSelected}
-                isLoading={isLoading}
-                disabled={!isConnected}
-              />
-            )}
+          <div className="space-y-6">
+            <AudioRecorder
+              onAudioRecorded={handleAudioRecorded}
+              isLoading={isLoading}
+            />
+            <FileUpload
+              onFileSelected={handleFileSelected}
+              isLoading={isLoading}
+              disabled={!isConnected}
+            />
           </div>
 
           <div>
@@ -209,15 +172,15 @@ function App() {
         </div>
 
         {/* Features Section */}
-        <div className="bg-white rounded-2xl p-8 border border-pink-200 shadow-lg">
+        <div className="bg-white rounded-2xl p-8 border border-yellow-200 shadow-lg">
           <h3 className="text-2xl font-bold text-gray-800 text-center mb-8">
             Why Choose SpeechCraft AI?
           </h3>
           
           <div className="grid md:grid-cols-3 gap-8">
             <div className="text-center">
-              <div className="p-4 bg-pink-100 rounded-full w-fit mx-auto mb-4">
-                <Sparkles className="w-8 h-8 text-pink-600" />
+              <div className="p-4 bg-yellow-100 rounded-full w-fit mx-auto mb-4">
+                <Sparkles className="w-8 h-8 text-yellow-600" />
               </div>
               <h4 className="text-lg font-semibold text-gray-800 mb-2">AI-Powered Accuracy</h4>
               <p className="text-gray-600">
@@ -226,8 +189,8 @@ function App() {
             </div>
             
             <div className="text-center">
-              <div className="p-4 bg-pink-100 rounded-full w-fit mx-auto mb-4">
-                <Mic className="w-8 h-8 text-pink-600" />
+              <div className="p-4 bg-yellow-100 rounded-full w-fit mx-auto mb-4">
+                <Sparkles className="w-8 h-8 text-yellow-600" />
               </div>
               <h4 className="text-lg font-semibold text-gray-800 mb-2">Real-time Recording</h4>
               <p className="text-gray-600">
@@ -236,8 +199,8 @@ function App() {
             </div>
             
             <div className="text-center">
-              <div className="p-4 bg-pink-100 rounded-full w-fit mx-auto mb-4">
-                <Upload className="w-8 h-8 text-pink-600" />
+              <div className="p-4 bg-yellow-100 rounded-full w-fit mx-auto mb-4">
+                <Sparkles className="w-8 h-8 text-yellow-600" />
               </div>
               <h4 className="text-lg font-semibold text-gray-800 mb-2">Multiple Formats</h4>
               <p className="text-gray-600">
