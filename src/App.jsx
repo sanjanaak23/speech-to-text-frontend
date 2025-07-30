@@ -202,61 +202,7 @@ function App() {
           </div>
         </div>
 
-        {/* Features Section */}
-        <div className="bg-white/90 backdrop-blur-sm rounded-2xl p-8 border border-yellow-200 shadow-lg hover-lift animate-fade-in-up delay-400">
-          <h3 className="text-2xl font-bold text-gray-800 text-center mb-8 animate-bounce-in delay-500">
-            Why Choose VoiceScribe?
-          </h3>
-          
-          <div className="grid md:grid-cols-3 gap-8">
-            <div className="text-center animate-fade-in delay-600 transform hover:scale-105 transition-all duration-300">
-              <div className="p-4 bg-yellow-100 rounded-full w-fit mx-auto mb-4 animate-float delay-100 hover:animate-glow">
-                <Sparkles className="w-8 h-8 text-yellow-600 animate-spin-slow" />
-              </div>
-              <h4 className="text-lg font-semibold text-gray-800 mb-2">High Accuracy</h4>
-              <p className="text-gray-600">
-                Advanced speech recognition technology for precise transcription results
-              </p>
-            </div>
-            
-            <div className="text-center animate-fade-in delay-700 transform hover:scale-105 transition-all duration-300">
-              <div className="p-4 bg-yellow-100 rounded-full w-fit mx-auto mb-4 animate-float delay-300 hover:animate-glow">
-                <Sparkles className="w-8 h-8 text-yellow-600 animate-spin-slow" />
-              </div>
-              <h4 className="text-lg font-semibold text-gray-800 mb-2">Easy Recording</h4>
-              <p className="text-gray-600">
-                Record directly in your browser with live visualization and instant processing
-              </p>
-            </div>
-            
-            <div className="text-center animate-fade-in delay-800 transform hover:scale-105 transition-all duration-300">
-              <div className="p-4 bg-yellow-100 rounded-full w-fit mx-auto mb-4 animate-float delay-500 hover:animate-glow">
-                <Sparkles className="w-8 h-8 text-yellow-600 animate-spin-slow" />
-              </div>
-              <h4 className="text-lg font-semibold text-gray-800 mb-2">Multiple Formats</h4>
-              <p className="text-gray-600">
-                Support for WAV, MP3, WebM, and OGG audio formats up to 25MB
-              </p>
-            </div>
-          </div>
-        </div>
       </main>
-
-      {/* Footer */}
-      <footer className="bg-white border-t border-yellow-200 mt-16">
-        <div className="max-w-6xl mx-auto px-4 py-8">
-          <div className="text-center">
-            <div className="flex items-center justify-center space-x-2 mb-4">
-              <span className="text-gray-600">Made with</span>
-              <Heart className="w-4 h-4 text-yellow-500 fill-current" />
-              <span className="text-gray-600">using React & modern web technologies</span>
-            </div>
-            <p className="text-sm text-gray-500">
-              © 2024 VoiceScribe. All rights reserved.
-            </p>
-          </div>
-        </div>
-      </footer>
       </div>
     </div>
   );
