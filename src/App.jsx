@@ -101,9 +101,9 @@ function App() {
               </div>
               <div>
                 <h1 className="text-2xl font-bold bg-gradient-to-r from-yellow-600 to-amber-600 bg-clip-text text-transparent">
-                  SpeechCraft AI
+                  VoiceScribe
                 </h1>
-                <p className="text-sm text-gray-600">Powered by OpenAI Whisper</p>
+                <p className="text-sm text-gray-600">Speech to Text Converter</p>
               </div>
             </div>
             
@@ -139,11 +139,11 @@ function App() {
         {/* Welcome Section */}
         <div className="text-center mb-12">
           <h2 className="text-4xl font-bold text-gray-800 mb-4">
-            Transform Speech into Text with AI ✨
+            Convert Speech to Text Easily ✨
           </h2>
           <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-            Upload audio files or record directly in your browser. Our AI-powered transcription
-            service delivers accurate results in seconds.
+            Upload audio files or record directly in your browser. Get accurate transcriptions
+            in seconds with our simple speech-to-text service.
           </p>
         </div>
 
@@ -174,7 +174,7 @@ function App() {
         {/* Features Section */}
         <div className="bg-white rounded-2xl p-8 border border-yellow-200 shadow-lg">
           <h3 className="text-2xl font-bold text-gray-800 text-center mb-8">
-            Why Choose SpeechCraft AI?
+            Why Choose VoiceScribe?
           </h3>
           
           <div className="grid md:grid-cols-3 gap-8">
@@ -182,9 +182,9 @@ function App() {
               <div className="p-4 bg-yellow-100 rounded-full w-fit mx-auto mb-4">
                 <Sparkles className="w-8 h-8 text-yellow-600" />
               </div>
-              <h4 className="text-lg font-semibold text-gray-800 mb-2">AI-Powered Accuracy</h4>
+              <h4 className="text-lg font-semibold text-gray-800 mb-2">High Accuracy</h4>
               <p className="text-gray-600">
-                Powered by OpenAI's Whisper model for industry-leading transcription accuracy
+                Advanced speech recognition technology for precise transcription results
               </p>
             </div>
             
@@ -192,9 +192,9 @@ function App() {
               <div className="p-4 bg-yellow-100 rounded-full w-fit mx-auto mb-4">
                 <Sparkles className="w-8 h-8 text-yellow-600" />
               </div>
-              <h4 className="text-lg font-semibold text-gray-800 mb-2">Real-time Recording</h4>
+              <h4 className="text-lg font-semibold text-gray-800 mb-2">Easy Recording</h4>
               <p className="text-gray-600">
-                Record directly in your browser with live audio visualization and instant processing
+                Record directly in your browser with live visualization and instant processing
               </p>
             </div>
             
@@ -218,10 +218,10 @@ function App() {
             <div className="flex items-center justify-center space-x-2 mb-4">
               <span className="text-gray-600">Made with</span>
               <Heart className="w-4 h-4 text-yellow-500 fill-current" />
-              <span className="text-gray-600">using React, OpenAI Whisper & Supabase</span>
+              <span className="text-gray-600">using React & modern web technologies</span>
             </div>
             <p className="text-sm text-gray-500">
-              © 2024 SpeechCraft AI. All rights reserved.
+              © 2024 VoiceScribe. All rights reserved.
             </p>
           </div>
         </div>
