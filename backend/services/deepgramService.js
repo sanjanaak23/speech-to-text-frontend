@@ -14,36 +14,53 @@ const transcribeAudio = async (filePath) => {
     // Read the audio file
     const audioBuffer = fs.readFileSync(filePath);
 
-    // Configure transcription options
-    const options = {
-      model: 'nova-2',
-      language: 'en',
-      smart_format: true,
-      punctuate: true,
-      diarize: false,
-      filler_words: false,
-      summarize: false
-    };
-
     console.log('🔄 Sending audio to Deepgram...');
+    console.log('📁 File size:', audioBuffer.length, 'bytes');
     
-    // Perform transcription
+    // Perform transcription using correct Deepgram v3 API
     const { result, error } = await deepgram.listen.prerecorded.transcribeFile(
       audioBuffer,
-      options
+      {
+        model: 'nova-2',
+        language: 'en',
+        smart_format: true,
+        punctuate: true
+      }
     );
 
+    console.log('📋 Raw Deepgram response received');
+
     if (error) {
-      throw new Error(`Deepgram API error: ${error.message}`);
+      console.error('❌ Deepgram API error:', error);
+      throw new Error(`Deepgram API error: ${JSON.stringify(error)}`);
     }
 
-    if (!result?.results?.channels?.[0]?.alternatives?.[0]?.transcript) {
-      throw new Error('No transcription found in Deepgram response');
+    if (!result) {
+      console.error('❌ No result from Deepgram');
+      throw new Error('No result received from Deepgram API');
     }
 
-    const transcript = result.results.channels[0].alternatives[0].transcript;
-    const confidence = result.results.channels[0].alternatives[0].confidence;
+    console.log('📋 Result structure:', {
+      hasResults: !!result.results,
+      hasChannels: !!result.results?.channels,
+      channelCount: result.results?.channels?.length || 0,
+      hasAlternatives: !!result.results?.channels?.[0]?.alternatives,
+      alternativeCount: result.results?.channels?.[0]?.alternatives?.length || 0
+    });
+
+    if (!result.results?.channels?.[0]?.alternatives?.[0]) {
+      console.error('❌ Invalid response structure:', JSON.stringify(result, null, 2));
+      throw new Error('Invalid response structure from Deepgram');
+    }
+
+    const alternative = result.results.channels[0].alternatives[0];
+    const transcript = alternative.transcript;
+    const confidence = alternative.confidence;
     const duration = result.metadata?.duration;
+
+    if (!transcript || transcript.trim() === '') {
+      throw new Error('Empty transcription result - audio may be silent or unclear');
+    }
 
     console.log('✅ Transcription completed');
     console.log(`📊 Confidence: ${(confidence * 100).toFixed(1)}%`);
