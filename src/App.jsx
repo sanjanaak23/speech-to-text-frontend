@@ -4,6 +4,7 @@ import FileUpload from './components/FileUpload';
 import TranscriptionDisplay from './components/TranscriptionDisplay';
 import { transcriptionAPI, audioUtils } from './services/api';
 import { Sparkles, Heart, Github } from 'lucide-react';
+import backgroundImage from './assets/background.jpg';
 
 function App() {
   const [isLoading, setIsLoading] = useState(false);
@@ -91,10 +92,10 @@ function App() {
 
   return (
     <div 
-      className="min-h-screen relative animate-bg-gradient"
+      className="min-h-screen relative"
       style={{
-        backgroundImage: 'url(/placeholder-bg.svg), linear-gradient(-45deg, #fbbf24, #f59e0b, #d97706, #92400e)',
-        backgroundSize: 'cover, 400% 400%',
+        backgroundImage: `url(${backgroundImage}), linear-gradient(-45deg, #fbbf24, #f59e0b, #d97706, #92400e)`,
+        backgroundSize: 'cover',
         backgroundPosition: 'center',
         backgroundAttachment: 'fixed'
       }}
