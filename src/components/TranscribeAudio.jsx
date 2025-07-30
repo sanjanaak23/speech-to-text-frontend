@@ -7,10 +7,10 @@ const TranscribeAudio = () => {
   const [transcription, setTranscription] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState('');
-  const [progress, setProgress] = useState(0);
   
   const mediaRecorderRef = useRef(null);
   const audioChunksRef = useRef([]);
+  const fileInputRef = useRef(null);
 
   const handleFileChange = (e) => {
     setSelectedFile(e.target.files[0]);
@@ -31,18 +31,18 @@ const TranscribeAudio = () => {
       mediaRecorderRef.current.onstop = () => {
         const blob = new Blob(audioChunksRef.current, { type: 'audio/webm' });
         setAudioBlob(blob);
+        setSelectedFile(null);
       };
 
-      mediaRecorderRef.current.start(1000); // Collect data every second
+      mediaRecorderRef.current.start();
       setIsRecording(true);
-      setError('');
     } catch (err) {
-      setError(`Recording failed: ${err.message}`);
+      setError(`Microphone access error: ${err.message}`);
     }
   };
 
   const stopRecording = () => {
-    if (mediaRecorderRef.current) {
+    if (mediaRecorderRef.current?.state !== 'inactive') {
       mediaRecorderRef.current.stop();
       mediaRecorderRef.current.stream.getTracks().forEach(track => track.stop());
       setIsRecording(false);
@@ -52,7 +52,6 @@ const TranscribeAudio = () => {
   const handleSubmit = async () => {
     setIsLoading(true);
     setError('');
-    setProgress(0);
     
     try {
       const formData = new FormData();
@@ -61,26 +60,22 @@ const TranscribeAudio = () => {
       } else if (selectedFile) {
         formData.append('audio', selectedFile);
       } else {
-        throw new Error('No audio selected');
+        throw new Error('Please select or record audio first');
       }
 
-      setProgress(20);
       const response = await fetch('http://localhost:5000/api/transcribe', {
         method: 'POST',
         body: formData
       });
 
-      setProgress(60);
-      const data = await response.json();
-
       if (!response.ok) {
-        throw new Error(data.error || 'Server error');
+        const errorData = await response.json();
+        throw new Error(errorData.error || 'Transcription failed');
       }
 
-      setProgress(100);
-      setTranscription(data.transcription);
+      const { transcription: result } = await response.json();
+      setTranscription(result);
     } catch (err) {
-      console.error('Upload error:', err);
       setError(err.message);
     } finally {
       setIsLoading(false);
@@ -88,88 +83,112 @@ const TranscribeAudio = () => {
   };
 
   return (
-    <div className="max-w-md mx-auto p-6 bg-white rounded-lg shadow-md">
-      <h1 className="text-2xl font-bold mb-4">Speech to Text Converter</h1>
-      
-      {/* File Upload */}
-      <div className="mb-4">
-        <label className="block mb-2">Upload Audio File</label>
-        <input
-          type="file"
-          accept="audio/*"
-          onChange={handleFileChange}
-          disabled={isRecording || isLoading}
-          className="w-full p-2 border rounded"
-        />
-      </div>
+    <div className="min-h-screen bg-gradient-to-b from-pink-50 to-pink-100 py-12 px-4">
+      <div className="max-w-md mx-auto bg-white rounded-xl shadow-md overflow-hidden">
+        {/* Header */}
+        <div className="bg-gradient-to-r from-pink-500 to-rose-500 p-6">
+          <h1 className="text-2xl font-bold text-white text-center">
+            Speech to Text Converter
+          </h1>
+        </div>
 
-      {/* Recording Controls */}
-      <div className="mb-4">
-        <label className="block mb-2">Or Record Audio</label>
-        <div className="flex gap-2">
+        {/* Main Content */}
+        <div className="p-6">
+          {/* File Upload */}
+          <div className="mb-6">
+            <label className="block text-sm font-medium text-pink-700 mb-2">
+              Upload Audio File
+            </label>
+            <div 
+              className="border-2 border-dashed border-pink-300 rounded-lg p-4 text-center cursor-pointer hover:bg-pink-50 transition"
+              onClick={() => fileInputRef.current.click()}
+            >
+              <input
+                type="file"
+                ref={fileInputRef}
+                accept="audio/*"
+                onChange={handleFileChange}
+                className="hidden"
+              />
+              {selectedFile ? (
+                <p className="text-pink-600">{selectedFile.name}</p>
+              ) : (
+                <p className="text-pink-500">
+                  Click to select or drag & drop audio file
+                </p>
+              )}
+            </div>
+          </div>
+
+          {/* Recording Controls */}
+          <div className="mb-6">
+            <label className="block text-sm font-medium text-pink-700 mb-2">
+              Or Record Audio
+            </label>
+            <div className="flex gap-3">
+              <button
+                onClick={startRecording}
+                disabled={isRecording || isLoading}
+                className={`flex-1 py-2 px-4 rounded-lg ${
+                  isRecording ? 'bg-rose-400' : 'bg-pink-500 hover:bg-pink-600'
+                } text-white font-medium transition-colors`}
+              >
+                {isRecording ? 'Recording...' : 'Start Recording'}
+              </button>
+              <button
+                onClick={stopRecording}
+                disabled={!isRecording || isLoading}
+                className="py-2 px-4 bg-pink-400 hover:bg-pink-500 text-white rounded-lg font-medium transition-colors"
+              >
+                Stop
+              </button>
+            </div>
+          </div>
+
+          {/* Audio Preview */}
+          {audioBlob && (
+            <div className="mb-6">
+              <audio 
+                controls 
+                src={URL.createObjectURL(audioBlob)} 
+                className="w-full rounded-lg"
+              />
+            </div>
+          )}
+
+          {/* Submit Button */}
           <button
-            onClick={startRecording}
-            disabled={isRecording || isLoading}
-            className={`px-4 py-2 rounded ${
-              isRecording ? 'bg-gray-400' : 'bg-red-500 hover:bg-red-600'
-            } text-white`}
+            onClick={handleSubmit}
+            disabled={(!selectedFile && !audioBlob) || isLoading}
+            className={`w-full py-3 px-4 rounded-lg ${
+              isLoading ? 'bg-pink-300' : 'bg-pink-500 hover:bg-pink-600'
+            } text-white font-medium text-lg transition-colors mb-6 shadow-md`}
           >
-            {isRecording ? 'Recording...' : 'Start Recording'}
+            {isLoading ? 'Processing...' : 'Transcribe Audio'}
           </button>
-          <button
-            onClick={stopRecording}
-            disabled={!isRecording || isLoading}
-            className="px-4 py-2 bg-gray-500 hover:bg-gray-600 text-white rounded"
-          >
-            Stop
-          </button>
+
+          {/* Error Display */}
+          {error && (
+            <div className="mb-6 p-3 bg-red-100 border-l-4 border-red-500 text-red-700 rounded">
+              <p>{error}</p>
+            </div>
+          )}
+
+          {/* Transcription Result */}
+          {transcription && (
+            <div className="bg-pink-50 rounded-lg p-4 border border-pink-200">
+              <h2 className="text-lg font-semibold text-pink-700 mb-2">
+                Transcription:
+              </h2>
+              <div className="bg-white p-3 rounded">
+                <p className="whitespace-pre-wrap">{transcription}</p>
+              </div>
+            </div>
+          )}
         </div>
       </div>
-
-      {/* Audio Preview */}
-      {audioBlob && (
-        <div className="mb-4">
-          <audio controls src={URL.createObjectURL(audioBlob)} className="w-full" />
-        </div>
-      )}
-
-      {/* Submit Button */}
-      <button
-        onClick={handleSubmit}
-        disabled={(!selectedFile && !audioBlob) || isLoading}
-        className={`w-full py-2 px-4 rounded text-white ${
-          isLoading ? 'bg-blue-300' : 'bg-blue-500 hover:bg-blue-600'
-        } mb-4`}
-      >
-        {isLoading ? 'Processing...' : 'Transcribe'}
-      </button>
-
-      {/* Progress Bar */}
-      {isLoading && (
-        <div className="w-full bg-gray-200 rounded-full h-2.5 mb-4">
-          <div
-            className="bg-blue-600 h-2.5 rounded-full"
-            style={{ width: `${progress}%` }}
-          ></div>
-        </div>
-      )}
-
-      {/* Error Display */}
-      {error && (
-        <div className="p-3 mb-4 bg-red-100 text-red-700 rounded">
-          Error: {error}
-        </div>
-      )}
-
-      {/* Transcription Result */}
-      {transcription && (
-        <div className="p-4 bg-gray-50 rounded border">
-          <h2 className="font-bold mb-2">Transcription:</h2>
-          <p className="whitespace-pre-wrap">{transcription}</p>
-        </div>
-      )}
     </div>
-  ); 
+  );
 };
 
 export default TranscribeAudio;
