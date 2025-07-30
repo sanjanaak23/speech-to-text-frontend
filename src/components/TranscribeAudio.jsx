@@ -7,19 +7,30 @@ const TranscribeAudio = () => {
   const [isRecording, setIsRecording] = useState(false);
   const [audioBlob, setAudioBlob] = useState(null);
   const [audioUrl, setAudioUrl] = useState('');
+  const [fileUrl, setFileUrl] = useState('');
   const [transcription, setTranscription] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState('');
+  const [copySuccess, setCopySuccess] = useState('');
   
   const mediaRecorderRef = useRef(null);
+  const mediaStreamRef = useRef(null);
   const audioChunksRef = useRef([]);
   const fileInputRef = useRef(null);
 
   useEffect(() => {
     return () => {
       if (audioUrl) URL.revokeObjectURL(audioUrl);
+      if (fileUrl) URL.revokeObjectURL(fileUrl);
+      // Clean up media recorder and stream on unmount
+      if (mediaRecorderRef.current && mediaRecorderRef.current.state === 'recording') {
+        mediaRecorderRef.current.stop();
+      }
+      if (mediaStreamRef.current) {
+        mediaStreamRef.current.getTracks().forEach(track => track.stop());
+      }
     };
-  }, [audioUrl]);
+  }, [audioUrl, fileUrl]);
 
   const handleFileChange = (e) => {
     const file = e.target.files[0];
@@ -39,6 +50,10 @@ const TranscribeAudio = () => {
     setSelectedFile(file);
     setAudioBlob(null);
     setAudioUrl('');
+    // Revoke previous file URL if it exists
+    if (fileUrl) URL.revokeObjectURL(fileUrl);
+    // Create new URL for the file
+    setFileUrl(URL.createObjectURL(file));
     setError('');
   };
 
@@ -49,6 +64,7 @@ const TranscribeAudio = () => {
   const startRecording = async () => {
     try {
       const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+      mediaStreamRef.current = stream;
       mediaRecorderRef.current = new MediaRecorder(stream);
       audioChunksRef.current = [];
 
@@ -61,6 +77,11 @@ const TranscribeAudio = () => {
         setAudioBlob(blob);
         setAudioUrl(URL.createObjectURL(blob));
         setSelectedFile(null);
+        // Clear file URL when recording
+        if (fileUrl) {
+          URL.revokeObjectURL(fileUrl);
+          setFileUrl('');
+        }
       };
 
       mediaRecorderRef.current.start(100);
@@ -74,7 +95,10 @@ const TranscribeAudio = () => {
   const stopRecording = () => {
     if (mediaRecorderRef.current?.state === 'recording') {
       mediaRecorderRef.current.stop();
-      mediaRecorderRef.current.stream.getTracks().forEach(track => track.stop());
+      if (mediaStreamRef.current) {
+        mediaStreamRef.current.getTracks().forEach(track => track.stop());
+        mediaStreamRef.current = null;
+      }
       setIsRecording(false);
     }
   };
@@ -144,6 +168,10 @@ const TranscribeAudio = () => {
                 className="clear-btn"
                 onClick={() => {
                   setSelectedFile(null);
+                  if (fileUrl) {
+                    URL.revokeObjectURL(fileUrl);
+                    setFileUrl('');
+                  }
                   setError('');
                 }}
               >
@@ -179,7 +207,7 @@ const TranscribeAudio = () => {
           <div className="audio-preview">
             <audio 
               controls 
-              src={audioUrl || URL.createObjectURL(selectedFile)} 
+              src={audioUrl || fileUrl} 
             />
           </div>
         )}
@@ -207,12 +235,32 @@ const TranscribeAudio = () => {
             <div className="transcription-text">{transcription}</div>
             <button 
               className="copy-btn"
-              onClick={() => {
-                navigator.clipboard.writeText(transcription);
+              onClick={async () => {
+                try {
+                  await navigator.clipboard.writeText(transcription);
+                  setCopySuccess('Copied to clipboard!');
+                  setTimeout(() => setCopySuccess(''), 2000);
+                } catch (err) {
+                  console.error('Failed to copy text: ', err);
+                  // Fallback for browsers that don't support clipboard API
+                  try {
+                    const textArea = document.createElement('textarea');
+                    textArea.value = transcription;
+                    document.body.appendChild(textArea);
+                    textArea.select();
+                    document.execCommand('copy');
+                    document.body.removeChild(textArea);
+                    setCopySuccess('Copied to clipboard!');
+                    setTimeout(() => setCopySuccess(''), 2000);
+                  } catch (fallbackErr) {
+                    setError('Failed to copy to clipboard. Please copy manually.');
+                  }
+                }
               }}
             >
               Copy to Clipboard
             </button>
+            {copySuccess && <div className="success-message">{copySuccess}</div>}
           </div>
         )}
       </div>

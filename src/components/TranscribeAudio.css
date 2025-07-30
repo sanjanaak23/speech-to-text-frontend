@@ -219,3 +219,14 @@
   0% { transform: rotate(0deg); }
   100% { transform: rotate(360deg); }
 }
+
+.success-message {
+  color: #059669;
+  background-color: #D1FAE5;
+  border: 1px solid #34D399;
+  padding: 10px;
+  border-radius: 8px;
+  margin-top: 10px;
+  text-align: center;
+  font-weight: 500;
+}
