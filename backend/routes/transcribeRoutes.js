@@ -1,6 +1,6 @@
 const express = require('express');
 const upload = require('../config/multerConfig');
-const { transcribeAudio } = require('../services/openaiService');
+const { transcribeAudio } = require('../services/deepgramService');
 const { storeTranscription, getTranscriptions } = require('../services/supabaseService');
 const path = require('path');
 
