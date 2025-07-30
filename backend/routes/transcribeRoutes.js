@@ -9,17 +9,30 @@ const router = express.Router();
 // Upload and transcribe audio file
 router.post('/upload', upload.single('audio'), async (req, res) => {
   try {
+    console.log('🚀 Upload endpoint called');
+    console.log('📋 Request body:', req.body);
+    console.log('📋 Request file:', req.file);
+
     if (!req.file) {
+      console.log('❌ No file received');
       return res.status(400).json({
         success: false,
         error: 'No audio file provided'
       });
     }
 
-    console.log('📁 File uploaded:', req.file.filename);
+    console.log('📁 File uploaded successfully:', {
+      filename: req.file.filename,
+      originalname: req.file.originalname,
+      mimetype: req.file.mimetype,
+      size: req.file.size,
+      path: req.file.path
+    });
+    
     const filePath = req.file.path;
 
-    // Transcribe with OpenAI
+    // Transcribe with Deepgram
+    console.log('🎵 Starting transcription process...');
     const transcriptionResult = await transcribeAudio(filePath);
     
     if (!transcriptionResult.success) {
@@ -95,7 +108,26 @@ router.get('/health', (req, res) => {
   res.json({
     success: true,
     message: 'Transcription service is healthy',
-    timestamp: new Date().toISOString()
+    timestamp: new Date().toISOString(),
+    deepgram_configured: !!process.env.DEEPGRAM_API_KEY
+  });
+});
+
+// Test endpoint for debugging
+router.post('/test', (req, res) => {
+  console.log('🧪 Test endpoint called');
+  console.log('📋 Headers:', req.headers);
+  console.log('📋 Body keys:', Object.keys(req.body));
+  console.log('📋 Files:', req.files);
+  
+  res.json({
+    success: true,
+    message: 'Test endpoint working',
+    received_data: {
+      headers: req.headers,
+      body_keys: Object.keys(req.body),
+      files: req.files
+    }
   });
 });
 

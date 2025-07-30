@@ -1,7 +1,11 @@
 const { createClient } = require('@deepgram/sdk');
 const fs = require('fs');
 
-const deepgram = createClient(process.env.DEEPGRAM_API_KEY);
+// Initialize Deepgram client with explicit API key
+const DEEPGRAM_API_KEY = 'f0b8a2389747e94a857ed5aed5476e8f0076290a';
+const deepgram = createClient(DEEPGRAM_API_KEY);
+
+console.log('🔑 Deepgram client initialized with API key:', DEEPGRAM_API_KEY.substring(0, 10) + '...');
 
 const transcribeAudio = async (filePath) => {
   try {
@@ -11,11 +15,37 @@ const transcribeAudio = async (filePath) => {
       throw new Error(`Audio file not found: ${filePath}`);
     }
 
+    // Get file extension to determine format
+    const fileExtension = filePath.split('.').pop().toLowerCase();
+    console.log('📁 File extension:', fileExtension);
+
     // Read the audio file
     const audioBuffer = fs.readFileSync(filePath);
 
     console.log('🔄 Sending audio to Deepgram...');
     console.log('📁 File size:', audioBuffer.length, 'bytes');
+    
+    // Determine MIME type based on file extension
+    let mimeType = 'audio/wav'; // default
+    switch (fileExtension) {
+      case 'mp3':
+        mimeType = 'audio/mpeg';
+        break;
+      case 'wav':
+        mimeType = 'audio/wav';
+        break;
+      case 'webm':
+        mimeType = 'audio/webm';
+        break;
+      case 'ogg':
+        mimeType = 'audio/ogg';
+        break;
+      case 'm4a':
+        mimeType = 'audio/mp4';
+        break;
+    }
+    
+    console.log('🎵 Detected MIME type:', mimeType);
     
     // Perform transcription using correct Deepgram v3 API
     const { result, error } = await deepgram.listen.prerecorded.transcribeFile(
@@ -24,7 +54,8 @@ const transcribeAudio = async (filePath) => {
         model: 'nova-2',
         language: 'en',
         smart_format: true,
-        punctuate: true
+        punctuate: true,
+        mimetype: mimeType
       }
     );
 
@@ -74,15 +105,27 @@ const transcribeAudio = async (filePath) => {
   } catch (error) {
     console.error('❌ Deepgram transcription error:', error);
     
-    if (error.message.includes('401')) {
-      throw new Error('Invalid Deepgram API key. Please check your configuration.');
-    } else if (error.message.includes('402')) {
-      throw new Error('Deepgram API quota exceeded. Please check your billing.');
-    } else if (error.message.includes('400')) {
-      throw new Error('Invalid audio format. Please use WAV, MP3, WebM, or OGG.');
+    // Handle specific Deepgram errors
+    if (error.__dgError) {
+      if (error.status === 401) {
+        throw new Error('Invalid Deepgram API key. Please check your configuration.');
+      } else if (error.status === 402) {
+        throw new Error('Deepgram API quota exceeded. Please check your billing.');
+      } else if (error.status === 400) {
+        if (error.message.includes('corrupt or unsupported data')) {
+          throw new Error('Audio file format not supported or corrupted. Please try a different file.');
+        }
+        throw new Error('Bad request to Deepgram API. Please check your audio file format.');
+      } else if (error.status === 429) {
+        throw new Error('Rate limit exceeded. Please try again in a moment.');
+      }
     }
     
-    throw new Error(`Transcription failed: ${error.message}`);
+    // Generic error handling
+    const errorMessage = error.message || error.toString();
+    console.error('📋 Full error details:', error);
+    
+    throw new Error(`Transcription failed: ${errorMessage}`);
   }
 };
 
