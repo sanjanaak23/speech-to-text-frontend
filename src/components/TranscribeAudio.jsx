@@ -12,10 +12,29 @@ const TranscribeAudio = () => {
   const audioChunksRef = useRef([]);
   const fileInputRef = useRef(null);
 
+  // Use environment variable with fallback for local development
+  const API_BASE_URL = import.meta.env.VITE_API_URL || 'https://speech-to-text-backend-i89r.onrender.com';
+
   const handleFileChange = (e) => {
-    setSelectedFile(e.target.files[0]);
-    setAudioBlob(null);
-    setError('');
+    const file = e.target.files[0];
+    if (file) {
+      // Validate file type
+      const validTypes = ['audio/wav', 'audio/mp3', 'audio/mpeg', 'audio/webm', 'audio/ogg'];
+      if (!validTypes.includes(file.type)) {
+        setError('Please upload a valid audio file (WAV, MP3, WEBM, or OGG)');
+        return;
+      }
+      
+      // Validate file size (25MB max)
+      if (file.size > 25 * 1024 * 1024) {
+        setError('File size too large (max 25MB)');
+        return;
+      }
+
+      setSelectedFile(file);
+      setAudioBlob(null);
+      setError('');
+    }
   };
 
   const startRecording = async () => {
@@ -34,17 +53,21 @@ const TranscribeAudio = () => {
         setSelectedFile(null);
       };
 
-      mediaRecorderRef.current.start();
+      mediaRecorderRef.current.start(100); // Collect data every 100ms
       setIsRecording(true);
     } catch (err) {
       setError(`Microphone access error: ${err.message}`);
+      console.error('Recording error:', err);
     }
   };
 
   const stopRecording = () => {
     if (mediaRecorderRef.current?.state !== 'inactive') {
       mediaRecorderRef.current.stop();
-      mediaRecorderRef.current.stream.getTracks().forEach(track => track.stop());
+      mediaRecorderRef.current.stream.getTracks().forEach(track => {
+        track.stop();
+        track.enabled = false;
+      });
       setIsRecording(false);
     }
   };
@@ -63,20 +86,30 @@ const TranscribeAudio = () => {
         throw new Error('Please select or record audio first');
       }
 
-      const response = await fetch('http://localhost:5000/api/transcribe', {
+      const response = await fetch(`${API_BASE_URL}/api/transcribe`, {
         method: 'POST',
         body: formData
       });
 
       if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(errorData.error || 'Transcription failed');
+        const errorText = await response.text();
+        try {
+          const errorData = JSON.parse(errorText);
+          throw new Error(errorData.error || 'Transcription failed');
+        } catch {
+          throw new Error(errorText || 'Transcription failed');
+        }
       }
 
-      const { transcription: result } = await response.json();
-      setTranscription(result);
+      const result = await response.json();
+      if (!result.transcription) {
+        throw new Error('Received empty transcription');
+      }
+
+      setTranscription(result.transcription);
     } catch (err) {
       setError(err.message);
+      console.error('API request failed:', err);
     } finally {
       setIsLoading(false);
     }
@@ -106,15 +139,20 @@ const TranscribeAudio = () => {
               <input
                 type="file"
                 ref={fileInputRef}
-                accept="audio/*"
+                accept=".wav,.mp3,.webm,.ogg,audio/*"
                 onChange={handleFileChange}
                 className="hidden"
               />
               {selectedFile ? (
-                <p className="text-pink-600">{selectedFile.name}</p>
+                <div>
+                  <p className="text-pink-600 font-medium">{selectedFile.name}</p>
+                  <p className="text-pink-500 text-sm">{(selectedFile.size / (1024 * 1024)).toFixed(2)} MB</p>
+                </div>
               ) : (
                 <p className="text-pink-500">
                   Click to select or drag & drop audio file
+                  <br />
+                  <span className="text-xs">(Supports WAV, MP3, WEBM, OGG)</span>
                 </p>
               )}
             </div>
@@ -131,14 +169,19 @@ const TranscribeAudio = () => {
                 disabled={isRecording || isLoading}
                 className={`flex-1 py-2 px-4 rounded-lg ${
                   isRecording ? 'bg-rose-400' : 'bg-pink-500 hover:bg-pink-600'
-                } text-white font-medium transition-colors`}
+                } text-white font-medium transition-colors disabled:opacity-50`}
               >
-                {isRecording ? 'Recording...' : 'Start Recording'}
+                {isRecording ? (
+                  <span className="flex items-center justify-center gap-2">
+                    <span className="w-3 h-3 bg-white rounded-full animate-pulse"></span>
+                    Recording...
+                  </span>
+                ) : 'Start Recording'}
               </button>
               <button
                 onClick={stopRecording}
                 disabled={!isRecording || isLoading}
-                className="py-2 px-4 bg-pink-400 hover:bg-pink-500 text-white rounded-lg font-medium transition-colors"
+                className="py-2 px-4 bg-pink-400 hover:bg-pink-500 text-white rounded-lg font-medium transition-colors disabled:opacity-50"
               >
                 Stop
               </button>
@@ -146,11 +189,11 @@ const TranscribeAudio = () => {
           </div>
 
           {/* Audio Preview */}
-          {audioBlob && (
+          {(audioBlob || selectedFile) && (
             <div className="mb-6">
               <audio 
                 controls 
-                src={URL.createObjectURL(audioBlob)} 
+                src={audioBlob ? URL.createObjectURL(audioBlob) : URL.createObjectURL(selectedFile)} 
                 className="w-full rounded-lg"
               />
             </div>
@@ -162,14 +205,23 @@ const TranscribeAudio = () => {
             disabled={(!selectedFile && !audioBlob) || isLoading}
             className={`w-full py-3 px-4 rounded-lg ${
               isLoading ? 'bg-pink-300' : 'bg-pink-500 hover:bg-pink-600'
-            } text-white font-medium text-lg transition-colors mb-6 shadow-md`}
+            } text-white font-medium text-lg transition-colors mb-6 shadow-md disabled:opacity-50`}
           >
-            {isLoading ? 'Processing...' : 'Transcribe Audio'}
+            {isLoading ? (
+              <span className="flex items-center justify-center gap-2">
+                <svg className="animate-spin h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                  <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                  <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                </svg>
+                Processing...
+              </span>
+            ) : 'Transcribe Audio'}
           </button>
 
           {/* Error Display */}
           {error && (
             <div className="mb-6 p-3 bg-red-100 border-l-4 border-red-500 text-red-700 rounded">
+              <p className="font-medium">Error:</p>
               <p>{error}</p>
             </div>
           )}
@@ -177,10 +229,16 @@ const TranscribeAudio = () => {
           {/* Transcription Result */}
           {transcription && (
             <div className="bg-pink-50 rounded-lg p-4 border border-pink-200">
-              <h2 className="text-lg font-semibold text-pink-700 mb-2">
-                Transcription:
-              </h2>
-              <div className="bg-white p-3 rounded">
+              <div className="flex justify-between items-center mb-2">
+                <h2 className="text-lg font-semibold text-pink-700">Transcription:</h2>
+                <button 
+                  onClick={() => navigator.clipboard.writeText(transcription)}
+                  className="text-pink-500 hover:text-pink-700 text-sm font-medium"
+                >
+                  Copy Text
+                </button>
+              </div>
+              <div className="bg-white p-3 rounded max-h-60 overflow-y-auto">
                 <p className="whitespace-pre-wrap">{transcription}</p>
               </div>
             </div>
