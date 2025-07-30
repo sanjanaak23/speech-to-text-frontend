@@ -3,10 +3,9 @@ import AudioRecorder from './components/AudioRecorder';
 import FileUpload from './components/FileUpload';
 import TranscriptionDisplay from './components/TranscriptionDisplay';
 import { transcriptionAPI, audioUtils } from './services/api';
-import { Mic, Upload, Sparkles, Heart, Github } from 'lucide-react';
+import { Sparkles, Heart, Github } from 'lucide-react';
 
 function App() {
-  const [activeTab, setActiveTab] = useState('record');
   const [isLoading, setIsLoading] = useState(false);
   const [transcription, setTranscription] = useState('');
   const [error, setError] = useState('');
