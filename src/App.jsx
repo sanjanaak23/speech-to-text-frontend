@@ -212,12 +212,12 @@ function App() {
       </main>
 
       {/* Footer */}
-      <footer className="bg-white border-t border-pink-200 mt-16">
+      <footer className="bg-white border-t border-yellow-200 mt-16">
         <div className="max-w-6xl mx-auto px-4 py-8">
           <div className="text-center">
             <div className="flex items-center justify-center space-x-2 mb-4">
               <span className="text-gray-600">Made with</span>
-              <Heart className="w-4 h-4 text-pink-500 fill-current" />
+              <Heart className="w-4 h-4 text-yellow-500 fill-current" />
               <span className="text-gray-600">using React, OpenAI Whisper & Supabase</span>
             </div>
             <p className="text-sm text-gray-500">

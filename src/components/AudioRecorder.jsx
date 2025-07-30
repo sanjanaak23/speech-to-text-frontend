@@ -147,7 +147,7 @@ const AudioRecorder = ({ onAudioRecorded, isLoading }) => {
   }, []);
 
   return (
-    <div className="bg-gradient-to-br from-pink-50 to-rose-50 rounded-2xl p-8 border border-pink-200 shadow-lg">
+    <div className="bg-gradient-to-br from-yellow-50 to-amber-50 rounded-2xl p-8 border border-yellow-200 shadow-lg">
       <div className="text-center mb-6">
         <h3 className="text-2xl font-bold text-gray-800 mb-2">🎤 Voice Recorder</h3>
         <p className="text-gray-600">Record your voice and convert it to text instantly</p>
@@ -159,20 +159,20 @@ const AudioRecorder = ({ onAudioRecorded, isLoading }) => {
           {/* Outer ring */}
           <div className={`w-32 h-32 rounded-full border-4 transition-all duration-300 ${
             isRecording 
-              ? 'border-pink-400 animate-pulse' 
-              : 'border-pink-200'
+              ? 'border-yellow-400 animate-pulse' 
+              : 'border-yellow-200'
           }`}>
             {/* Inner circle with audio level */}
             <div 
               className={`w-full h-full rounded-full transition-all duration-100 flex items-center justify-center ${
-                isRecording ? 'bg-pink-400' : 'bg-pink-100'
+                isRecording ? 'bg-yellow-400' : 'bg-yellow-100'
               }`}
               style={{
                 transform: `scale(${0.8 + (audioLevel * 0.3)})`,
                 opacity: isRecording ? 0.8 + (audioLevel * 0.2) : 1
               }}
             >
-              <Mic className={`w-8 h-8 ${isRecording ? 'text-white' : 'text-pink-500'}`} />
+              <Mic className={`w-8 h-8 ${isRecording ? 'text-white' : 'text-yellow-500'}`} />
             </div>
           </div>
         </div>
@@ -181,7 +181,7 @@ const AudioRecorder = ({ onAudioRecorded, isLoading }) => {
       {/* Recording Time */}
       {(isRecording || recordingTime > 0) && (
         <div className="text-center mb-6">
-          <div className="inline-flex items-center space-x-2 bg-white rounded-full px-4 py-2 border border-pink-200">
+          <div className="inline-flex items-center space-x-2 bg-white rounded-full px-4 py-2 border border-yellow-200">
             {isRecording && (
               <div className="w-3 h-3 bg-red-500 rounded-full animate-pulse"></div>
             )}
@@ -198,7 +198,7 @@ const AudioRecorder = ({ onAudioRecorded, isLoading }) => {
           <button
             onClick={startRecording}
             disabled={isLoading}
-            className="bg-gradient-to-r from-pink-500 to-rose-500 hover:from-pink-600 hover:to-rose-600 disabled:from-gray-400 disabled:to-gray-500 text-white px-8 py-3 rounded-full font-semibold transition-all duration-200 transform hover:scale-105 disabled:scale-100 shadow-lg flex items-center space-x-2"
+            className="bg-gradient-to-r from-yellow-500 to-amber-500 hover:from-yellow-600 hover:to-amber-600 disabled:from-gray-400 disabled:to-gray-500 text-white px-8 py-3 rounded-full font-semibold transition-all duration-200 transform hover:scale-105 disabled:scale-100 shadow-lg flex items-center space-x-2"
           >
             <Mic className="w-5 h-5" />
             <span>Start Recording</span>
@@ -206,7 +206,7 @@ const AudioRecorder = ({ onAudioRecorded, isLoading }) => {
         ) : (
           <button
             onClick={stopRecording}
-            className="bg-gradient-to-r from-red-500 to-pink-500 hover:from-red-600 hover:to-pink-600 text-white px-8 py-3 rounded-full font-semibold transition-all duration-200 transform hover:scale-105 shadow-lg flex items-center space-x-2"
+            className="bg-gradient-to-r from-red-500 to-yellow-500 hover:from-red-600 hover:to-yellow-600 text-white px-8 py-3 rounded-full font-semibold transition-all duration-200 transform hover:scale-105 shadow-lg flex items-center space-x-2"
           >
             <Square className="w-5 h-5" />
             <span>Stop Recording</span>
@@ -226,12 +226,12 @@ const AudioRecorder = ({ onAudioRecorded, isLoading }) => {
 
       {/* Audio Playback */}
       {audioURL && (
-        <div className="bg-white rounded-xl p-4 border border-pink-200">
+        <div className="bg-white rounded-xl p-4 border border-yellow-200">
           <div className="flex items-center justify-between">
             <span className="text-gray-700 font-medium">🎵 Recording Preview</span>
             <button
               onClick={togglePlayback}
-              className="bg-pink-100 hover:bg-pink-200 text-pink-600 p-2 rounded-full transition-all duration-200"
+              className="bg-yellow-100 hover:bg-yellow-200 text-yellow-600 p-2 rounded-full transition-all duration-200"
             >
               {isPlaying ? <Pause className="w-5 h-5" /> : <Play className="w-5 h-5" />}
             </button>
@@ -248,8 +248,8 @@ const AudioRecorder = ({ onAudioRecorded, isLoading }) => {
 
       {isLoading && (
         <div className="text-center mt-4">
-          <div className="inline-flex items-center space-x-2 text-pink-600">
-            <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-pink-600"></div>
+          <div className="inline-flex items-center space-x-2 text-yellow-600">
+            <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-yellow-600"></div>
             <span>Processing audio...</span>
           </div>
         </div>

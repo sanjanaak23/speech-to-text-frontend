@@ -52,17 +52,17 @@ const TranscriptionDisplay = ({ transcription, isLoading, error, history = [] })
 
   if (isLoading) {
     return (
-      <div className="bg-gradient-to-br from-pink-50 to-rose-50 rounded-2xl p-8 border border-pink-200 shadow-lg">
+      <div className="bg-gradient-to-br from-yellow-50 to-amber-50 rounded-2xl p-8 border border-yellow-200 shadow-lg">
         <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-pink-600 mx-auto mb-4"></div>
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-yellow-600 mx-auto mb-4"></div>
           <h3 className="text-xl font-bold text-gray-800 mb-2">Processing Audio...</h3>
           <p className="text-gray-600">Our AI is transcribing your audio. This may take a few moments.</p>
           
-          <div className="mt-6 bg-white rounded-xl p-4 border border-pink-200">
+          <div className="mt-6 bg-white rounded-xl p-4 border border-yellow-200">
             <div className="space-y-3">
-              <div className="h-4 bg-pink-100 rounded animate-pulse"></div>
-              <div className="h-4 bg-pink-100 rounded animate-pulse w-4/5"></div>
-              <div className="h-4 bg-pink-100 rounded animate-pulse w-3/5"></div>
+              <div className="h-4 bg-yellow-100 rounded animate-pulse"></div>
+              <div className="h-4 bg-yellow-100 rounded animate-pulse w-4/5"></div>
+              <div className="h-4 bg-yellow-100 rounded animate-pulse w-3/5"></div>
             </div>
           </div>
         </div>
@@ -72,7 +72,7 @@ const TranscriptionDisplay = ({ transcription, isLoading, error, history = [] })
 
   if (error) {
     return (
-      <div className="bg-gradient-to-br from-red-50 to-pink-50 rounded-2xl p-8 border border-red-200 shadow-lg">
+      <div className="bg-gradient-to-br from-red-50 to-yellow-50 rounded-2xl p-8 border border-red-200 shadow-lg">
         <div className="text-center">
           <div className="p-3 bg-red-100 rounded-full w-fit mx-auto mb-4">
             <FileText className="w-8 h-8 text-red-600" />
@@ -87,10 +87,10 @@ const TranscriptionDisplay = ({ transcription, isLoading, error, history = [] })
 
   if (!transcription && history.length === 0) {
     return (
-      <div className="bg-gradient-to-br from-pink-50 to-rose-50 rounded-2xl p-8 border border-pink-200 shadow-lg">
+      <div className="bg-gradient-to-br from-yellow-50 to-amber-50 rounded-2xl p-8 border border-yellow-200 shadow-lg">
         <div className="text-center">
-          <div className="p-3 bg-pink-100 rounded-full w-fit mx-auto mb-4">
-            <FileText className="w-8 h-8 text-pink-600" />
+          <div className="p-3 bg-yellow-100 rounded-full w-fit mx-auto mb-4">
+            <FileText className="w-8 h-8 text-yellow-600" />
           </div>
           <h3 className="text-xl font-bold text-gray-800 mb-2">Ready to Transcribe</h3>
           <p className="text-gray-600">Record audio or upload a file to get started with AI-powered transcription.</p>
@@ -103,10 +103,10 @@ const TranscriptionDisplay = ({ transcription, isLoading, error, history = [] })
     <div className="space-y-6">
       {/* Current Transcription */}
       {transcription && (
-        <div className="bg-gradient-to-br from-pink-50 to-rose-50 rounded-2xl p-8 border border-pink-200 shadow-lg">
+        <div className="bg-gradient-to-br from-yellow-50 to-amber-50 rounded-2xl p-8 border border-yellow-200 shadow-lg">
           <div className="flex items-center justify-between mb-6">
             <h3 className="text-2xl font-bold text-gray-800 flex items-center space-x-2">
-              <FileText className="w-6 h-6 text-pink-600" />
+              <FileText className="w-6 h-6 text-yellow-600" />
               <span>Transcription Result</span>
             </h3>
             <div className="flex items-center space-x-2">
@@ -115,7 +115,7 @@ const TranscriptionDisplay = ({ transcription, isLoading, error, history = [] })
             </div>
           </div>
 
-          <div className="bg-white rounded-xl p-6 border border-pink-200 mb-6">
+          <div className="bg-white rounded-xl p-6 border border-yellow-200 mb-6">
             <div className="prose max-w-none">
               <p className="text-gray-800 leading-relaxed whitespace-pre-wrap">
                 {transcription}
@@ -126,7 +126,7 @@ const TranscriptionDisplay = ({ transcription, isLoading, error, history = [] })
           <div className="flex flex-wrap gap-3">
             <button
               onClick={() => copyToClipboard(transcription)}
-              className="bg-gradient-to-r from-pink-500 to-rose-500 hover:from-pink-600 hover:to-rose-600 text-white px-4 py-2 rounded-full font-semibold transition-all duration-200 transform hover:scale-105 shadow-lg flex items-center space-x-2"
+              className="bg-gradient-to-r from-yellow-500 to-amber-500 hover:from-yellow-600 hover:to-amber-600 text-white px-4 py-2 rounded-full font-semibold transition-all duration-200 transform hover:scale-105 shadow-lg flex items-center space-x-2"
             >
               {copied ? <CheckCircle className="w-4 h-4" /> : <Copy className="w-4 h-4" />}
               <span>{copied ? 'Copied!' : 'Copy'}</span>
@@ -134,7 +134,7 @@ const TranscriptionDisplay = ({ transcription, isLoading, error, history = [] })
 
             <button
               onClick={() => downloadTranscription(transcription)}
-              className="bg-white hover:bg-pink-50 text-pink-600 border border-pink-300 px-4 py-2 rounded-full font-semibold transition-all duration-200 transform hover:scale-105 shadow-lg flex items-center space-x-2"
+              className="bg-white hover:bg-yellow-50 text-yellow-600 border border-yellow-300 px-4 py-2 rounded-full font-semibold transition-all duration-200 transform hover:scale-105 shadow-lg flex items-center space-x-2"
             >
               <Download className="w-4 h-4" />
               <span>Download</span>
@@ -142,7 +142,7 @@ const TranscriptionDisplay = ({ transcription, isLoading, error, history = [] })
 
             <button
               onClick={() => shareTranscription(transcription)}
-              className="bg-white hover:bg-pink-50 text-pink-600 border border-pink-300 px-4 py-2 rounded-full font-semibold transition-all duration-200 transform hover:scale-105 shadow-lg flex items-center space-x-2"
+              className="bg-white hover:bg-yellow-50 text-yellow-600 border border-yellow-300 px-4 py-2 rounded-full font-semibold transition-all duration-200 transform hover:scale-105 shadow-lg flex items-center space-x-2"
             >
               <Share2 className="w-4 h-4" />
               <span>Share</span>
@@ -153,18 +153,18 @@ const TranscriptionDisplay = ({ transcription, isLoading, error, history = [] })
 
       {/* History */}
       {history.length > 0 && (
-        <div className="bg-gradient-to-br from-pink-50 to-rose-50 rounded-2xl p-8 border border-pink-200 shadow-lg">
+        <div className="bg-gradient-to-br from-yellow-50 to-amber-50 rounded-2xl p-8 border border-yellow-200 shadow-lg">
           <h3 className="text-2xl font-bold text-gray-800 mb-6 flex items-center space-x-2">
-            <Clock className="w-6 h-6 text-pink-600" />
+            <Clock className="w-6 h-6 text-yellow-600" />
             <span>Recent Transcriptions</span>
           </h3>
 
           <div className="space-y-4">
             {history.map((item, index) => (
-              <div key={item.id || index} className="bg-white rounded-xl p-4 border border-pink-200">
+              <div key={item.id || index} className="bg-white rounded-xl p-4 border border-yellow-200">
                 <div className="flex items-start justify-between mb-3">
                   <div className="flex items-center space-x-2">
-                    <FileText className="w-4 h-4 text-pink-600" />
+                    <FileText className="w-4 h-4 text-yellow-600" />
                     <span className="text-sm font-medium text-gray-600">
                       {item.filename || `Recording ${index + 1}`}
                     </span>
@@ -181,7 +181,7 @@ const TranscriptionDisplay = ({ transcription, isLoading, error, history = [] })
                 <div className="flex space-x-2">
                   <button
                     onClick={() => copyToClipboard(item.transcription)}
-                    className="bg-pink-100 hover:bg-pink-200 text-pink-600 px-3 py-1 rounded-full text-xs font-medium transition-all duration-200 flex items-center space-x-1"
+                    className="bg-yellow-100 hover:bg-yellow-200 text-yellow-600 px-3 py-1 rounded-full text-xs font-medium transition-all duration-200 flex items-center space-x-1"
                   >
                     <Copy className="w-3 h-3" />
                     <span>Copy</span>
@@ -189,7 +189,7 @@ const TranscriptionDisplay = ({ transcription, isLoading, error, history = [] })
                   
                   <button
                     onClick={() => downloadTranscription(item.transcription, `transcription-${index + 1}.txt`)}
-                    className="bg-pink-100 hover:bg-pink-200 text-pink-600 px-3 py-1 rounded-full text-xs font-medium transition-all duration-200 flex items-center space-x-1"
+                    className="bg-yellow-100 hover:bg-yellow-200 text-yellow-600 px-3 py-1 rounded-full text-xs font-medium transition-all duration-200 flex items-center space-x-1"
                   >
                     <Download className="w-3 h-3" />
                     <span>Download</span>

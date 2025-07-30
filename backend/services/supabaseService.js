@@ -9,7 +9,7 @@ const supabase = createClient(
 
 const storeTranscription = async (filename, transcription, userId = 'anonymous') => {
   try {
-    const filePath = path.join(__dirname, '../../backend/uploads', filename);
+    const filePath = path.join(__dirname, '../uploads', filename);
     
     // Verify file exists
     if (!fs.existsSync(filePath)) {

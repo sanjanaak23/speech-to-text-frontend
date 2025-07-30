@@ -28,12 +28,19 @@ if [ ! -d "backend/node_modules" ]; then
     cd ..
 fi
 
-# Check if environment files exist
+# Check if environment files exist and create them if needed
 if [ ! -f "backend/.env" ]; then
-    echo "⚠️  Backend .env file not found!"
-    echo "📝 Please copy backend/.env.example to backend/.env and configure your API keys"
-    echo "💡 You need at least an OpenAI API key to run the application"
-    exit 1
+    echo "📝 Creating backend/.env file from template..."
+    cp backend/.env.example backend/.env
+    echo "⚠️  Please edit backend/.env and add your OpenAI API key!"
+    echo "💡 Get your API key from: https://platform.openai.com/api-keys"
+    echo "📂 File location: backend/.env"
+    echo ""
+fi
+
+if [ ! -f ".env" ]; then
+    echo "📝 Creating frontend .env file from template..."
+    cp .env.example .env
 fi
 
 # Function to cleanup background processes

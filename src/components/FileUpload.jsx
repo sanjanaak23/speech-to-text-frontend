@@ -79,7 +79,7 @@ const FileUpload = ({ onFileSelected, isLoading, disabled }) => {
   };
 
   return (
-    <div className="bg-gradient-to-br from-pink-50 to-rose-50 rounded-2xl p-8 border border-pink-200 shadow-lg">
+    <div className="bg-gradient-to-br from-yellow-50 to-amber-50 rounded-2xl p-8 border border-yellow-200 shadow-lg">
       <div className="text-center mb-6">
         <h3 className="text-2xl font-bold text-gray-800 mb-2">📁 File Upload</h3>
         <p className="text-gray-600">Upload an audio file to transcribe</p>
@@ -89,10 +89,10 @@ const FileUpload = ({ onFileSelected, isLoading, disabled }) => {
         <div
           className={`relative border-2 border-dashed rounded-xl p-8 text-center transition-all duration-300 cursor-pointer ${
             dragActive
-              ? 'border-pink-500 bg-pink-100'
+              ? 'border-yellow-500 bg-yellow-100'
               : disabled
               ? 'border-gray-300 bg-gray-50 cursor-not-allowed'
-              : 'border-pink-300 hover:border-pink-500 hover:bg-pink-50'
+              : 'border-yellow-300 hover:border-yellow-500 hover:bg-yellow-50'
           }`}
           onDragEnter={handleDrag}
           onDragLeave={handleDrag}
@@ -111,10 +111,10 @@ const FileUpload = ({ onFileSelected, isLoading, disabled }) => {
           
           <div className="flex flex-col items-center space-y-4">
             <div className={`p-4 rounded-full ${
-              dragActive ? 'bg-pink-200' : 'bg-pink-100'
+              dragActive ? 'bg-yellow-200' : 'bg-yellow-100'
             }`}>
               <Upload className={`w-8 h-8 ${
-                disabled ? 'text-gray-400' : dragActive ? 'text-pink-600' : 'text-pink-500'
+                disabled ? 'text-gray-400' : dragActive ? 'text-yellow-600' : 'text-yellow-500'
               }`} />
             </div>
             
@@ -132,18 +132,18 @@ const FileUpload = ({ onFileSelected, isLoading, disabled }) => {
             </div>
             
             {!disabled && (
-              <button className="bg-gradient-to-r from-pink-500 to-rose-500 hover:from-pink-600 hover:to-rose-600 text-white px-6 py-2 rounded-full font-semibold transition-all duration-200 transform hover:scale-105 shadow-lg">
+              <button className="bg-gradient-to-r from-yellow-500 to-amber-500 hover:from-yellow-600 hover:to-amber-600 text-white px-6 py-2 rounded-full font-semibold transition-all duration-200 transform hover:scale-105 shadow-lg">
                 Choose File
               </button>
             )}
           </div>
         </div>
       ) : (
-        <div className="bg-white rounded-xl p-6 border border-pink-200">
+        <div className="bg-white rounded-xl p-6 border border-yellow-200">
           <div className="flex items-center justify-between">
             <div className="flex items-center space-x-3">
-              <div className="p-2 bg-pink-100 rounded-full">
-                <File className="w-6 h-6 text-pink-600" />
+              <div className="p-2 bg-yellow-100 rounded-full">
+                <File className="w-6 h-6 text-yellow-600" />
               </div>
               <div>
                 <p className="font-semibold text-gray-800 truncate max-w-xs">
@@ -174,8 +174,8 @@ const FileUpload = ({ onFileSelected, isLoading, disabled }) => {
           </div>
           
           {isLoading && (
-            <div className="mt-4 flex items-center space-x-2 text-pink-600">
-              <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-pink-600"></div>
+            <div className="mt-4 flex items-center space-x-2 text-yellow-600">
+              <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-yellow-600"></div>
               <span className="text-sm">Processing file...</span>
             </div>
           )}
