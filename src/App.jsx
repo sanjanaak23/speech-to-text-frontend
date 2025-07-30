@@ -90,22 +90,47 @@ function App() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-yellow-100 via-amber-50 to-white">
-      {/* Header */}
-      <header className="bg-white/80 backdrop-blur-sm border-b border-yellow-200 sticky top-0 z-50">
-        <div className="max-w-6xl mx-auto px-4 py-4">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center space-x-3">
-              <div className="p-2 bg-gradient-to-r from-yellow-500 to-amber-500 rounded-xl">
-                <Sparkles className="w-8 h-8 text-white" />
+    <div 
+      className="min-h-screen relative animate-bg-gradient"
+      style={{
+        backgroundImage: 'url(/placeholder-bg.svg), linear-gradient(-45deg, #fbbf24, #f59e0b, #d97706, #92400e)',
+        backgroundSize: 'cover, 400% 400%',
+        backgroundPosition: 'center',
+        backgroundAttachment: 'fixed'
+      }}
+    >
+      {/* Animated overlay */}
+      <div className="absolute inset-0 bg-gradient-to-br from-yellow-900/20 via-amber-800/10 to-white/30 animate-pulse"></div>
+      
+      {/* Floating animation elements */}
+      <div className="absolute inset-0 overflow-hidden pointer-events-none">
+        <div className="absolute top-20 left-10 w-20 h-20 bg-yellow-300/20 rounded-full animate-bounce delay-100"></div>
+        <div className="absolute top-40 right-20 w-16 h-16 bg-amber-400/20 rounded-full animate-bounce delay-300"></div>
+        <div className="absolute bottom-40 left-20 w-24 h-24 bg-yellow-200/20 rounded-full animate-bounce delay-500"></div>
+        <div className="absolute bottom-20 right-40 w-12 h-12 bg-amber-300/20 rounded-full animate-bounce delay-700"></div>
+        
+        {/* Floating particles */}
+        <div className="absolute top-1/4 left-1/4 w-2 h-2 bg-yellow-400 rounded-full animate-ping delay-200"></div>
+        <div className="absolute top-1/2 right-1/3 w-3 h-3 bg-amber-500 rounded-full animate-ping delay-400"></div>
+        <div className="absolute bottom-1/3 left-1/2 w-2 h-2 bg-yellow-500 rounded-full animate-ping delay-600"></div>
+      </div>
+      
+      <div className="relative z-10">
+              {/* Header */}
+        <header className="bg-white/80 backdrop-blur-sm border-b border-yellow-200 sticky top-0 z-50 animate-slide-down">
+          <div className="max-w-6xl mx-auto px-4 py-4">
+            <div className="flex items-center justify-between">
+              <div className="flex items-center space-x-3 animate-fade-in">
+                <div className="p-2 bg-gradient-to-r from-yellow-500 to-amber-500 rounded-xl transform hover:scale-110 transition-all duration-300 animate-pulse hover:animate-none">
+                  <Sparkles className="w-8 h-8 text-white animate-spin-slow" />
+                </div>
+                <div className="transform hover:scale-105 transition-all duration-300">
+                  <h1 className="text-2xl font-bold bg-gradient-to-r from-yellow-600 to-amber-600 bg-clip-text text-transparent animate-gradient">
+                    VoiceScribe
+                  </h1>
+                  <p className="text-sm text-gray-600 animate-fade-in delay-300">Speech to Text Converter</p>
+                </div>
               </div>
-              <div>
-                <h1 className="text-2xl font-bold bg-gradient-to-r from-yellow-600 to-amber-600 bg-clip-text text-transparent">
-                  VoiceScribe
-                </h1>
-                <p className="text-sm text-gray-600">Speech to Text Converter</p>
-              </div>
-            </div>
             
             <div className="flex items-center space-x-4">
               {/* Connection Status */}
@@ -137,11 +162,11 @@ function App() {
       {/* Main Content */}
       <main className="max-w-6xl mx-auto px-4 py-8">
         {/* Welcome Section */}
-        <div className="text-center mb-12">
-          <h2 className="text-4xl font-bold text-gray-800 mb-4">
+        <div className="text-center mb-12 animate-fade-in-up">
+          <h2 className="text-4xl font-bold text-gray-800 mb-4 animate-bounce-in">
             Convert Speech to Text Easily ✨
           </h2>
-          <p className="text-xl text-gray-600 max-w-3xl mx-auto">
+          <p className="text-xl text-gray-600 max-w-3xl mx-auto animate-fade-in delay-200 transform hover:scale-105 transition-all duration-300">
             Upload audio files or record directly in your browser. Get accurate transcriptions
             in seconds with our simple speech-to-text service.
           </p>
@@ -149,38 +174,44 @@ function App() {
 
         {/* Input Section - Both Recording and Upload */}
         <div className="grid lg:grid-cols-2 gap-8 mb-8">
-          <div className="space-y-6">
-            <AudioRecorder
-              onAudioRecorded={handleAudioRecorded}
-              isLoading={isLoading}
-            />
-            <FileUpload
-              onFileSelected={handleFileSelected}
-              isLoading={isLoading}
-              disabled={!isConnected}
-            />
+          <div className="space-y-6 animate-slide-in-left">
+            <div className="transform hover:scale-105 transition-all duration-300">
+              <AudioRecorder
+                onAudioRecorded={handleAudioRecorded}
+                isLoading={isLoading}
+              />
+            </div>
+            <div className="transform hover:scale-105 transition-all duration-300 animate-fade-in delay-300">
+              <FileUpload
+                onFileSelected={handleFileSelected}
+                isLoading={isLoading}
+                disabled={!isConnected}
+              />
+            </div>
           </div>
 
-          <div>
-            <TranscriptionDisplay
-              transcription={transcription}
-              isLoading={isLoading}
-              error={error}
-              history={history}
-            />
+          <div className="animate-slide-in-right">
+            <div className="transform hover:scale-105 transition-all duration-300">
+              <TranscriptionDisplay
+                transcription={transcription}
+                isLoading={isLoading}
+                error={error}
+                history={history}
+              />
+            </div>
           </div>
         </div>
 
         {/* Features Section */}
-        <div className="bg-white rounded-2xl p-8 border border-yellow-200 shadow-lg">
-          <h3 className="text-2xl font-bold text-gray-800 text-center mb-8">
+        <div className="bg-white/90 backdrop-blur-sm rounded-2xl p-8 border border-yellow-200 shadow-lg hover-lift animate-fade-in-up delay-400">
+          <h3 className="text-2xl font-bold text-gray-800 text-center mb-8 animate-bounce-in delay-500">
             Why Choose VoiceScribe?
           </h3>
           
           <div className="grid md:grid-cols-3 gap-8">
-            <div className="text-center">
-              <div className="p-4 bg-yellow-100 rounded-full w-fit mx-auto mb-4">
-                <Sparkles className="w-8 h-8 text-yellow-600" />
+            <div className="text-center animate-fade-in delay-600 transform hover:scale-105 transition-all duration-300">
+              <div className="p-4 bg-yellow-100 rounded-full w-fit mx-auto mb-4 animate-float delay-100 hover:animate-glow">
+                <Sparkles className="w-8 h-8 text-yellow-600 animate-spin-slow" />
               </div>
               <h4 className="text-lg font-semibold text-gray-800 mb-2">High Accuracy</h4>
               <p className="text-gray-600">
@@ -188,9 +219,9 @@ function App() {
               </p>
             </div>
             
-            <div className="text-center">
-              <div className="p-4 bg-yellow-100 rounded-full w-fit mx-auto mb-4">
-                <Sparkles className="w-8 h-8 text-yellow-600" />
+            <div className="text-center animate-fade-in delay-700 transform hover:scale-105 transition-all duration-300">
+              <div className="p-4 bg-yellow-100 rounded-full w-fit mx-auto mb-4 animate-float delay-300 hover:animate-glow">
+                <Sparkles className="w-8 h-8 text-yellow-600 animate-spin-slow" />
               </div>
               <h4 className="text-lg font-semibold text-gray-800 mb-2">Easy Recording</h4>
               <p className="text-gray-600">
@@ -198,9 +229,9 @@ function App() {
               </p>
             </div>
             
-            <div className="text-center">
-              <div className="p-4 bg-yellow-100 rounded-full w-fit mx-auto mb-4">
-                <Sparkles className="w-8 h-8 text-yellow-600" />
+            <div className="text-center animate-fade-in delay-800 transform hover:scale-105 transition-all duration-300">
+              <div className="p-4 bg-yellow-100 rounded-full w-fit mx-auto mb-4 animate-float delay-500 hover:animate-glow">
+                <Sparkles className="w-8 h-8 text-yellow-600 animate-spin-slow" />
               </div>
               <h4 className="text-lg font-semibold text-gray-800 mb-2">Multiple Formats</h4>
               <p className="text-gray-600">
@@ -226,6 +257,7 @@ function App() {
           </div>
         </div>
       </footer>
+      </div>
     </div>
   );
 }

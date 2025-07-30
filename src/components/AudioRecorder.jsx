@@ -147,34 +147,46 @@ const AudioRecorder = ({ onAudioRecorded, isLoading }) => {
   }, []);
 
   return (
-    <div className="bg-gradient-to-br from-yellow-50 to-amber-50 rounded-2xl p-8 border border-yellow-200 shadow-lg">
-      <div className="text-center mb-6">
-        <h3 className="text-2xl font-bold text-gray-800 mb-2">🎤 Voice Recorder</h3>
-        <p className="text-gray-600">Record your voice and convert it to text instantly</p>
+    <div className="bg-gradient-to-br from-yellow-50/90 to-amber-50/90 backdrop-blur-sm rounded-2xl p-8 border border-yellow-200 shadow-lg hover-lift">
+      <div className="text-center mb-6 animate-fade-in">
+        <h3 className="text-2xl font-bold text-gray-800 mb-2 animate-bounce-in">🎤 Voice Recorder</h3>
+        <p className="text-gray-600 animate-fade-in delay-200">Record your voice and convert it to text instantly</p>
       </div>
 
       {/* Audio Level Visualizer */}
-      <div className="flex justify-center mb-6">
+      <div className="flex justify-center mb-6 animate-fade-in delay-300">
         <div className="relative">
           {/* Outer ring */}
-          <div className={`w-32 h-32 rounded-full border-4 transition-all duration-300 ${
+          <div className={`w-32 h-32 rounded-full border-4 transition-all duration-300 hover:scale-110 ${
             isRecording 
-              ? 'border-yellow-400 animate-pulse' 
-              : 'border-yellow-200'
+              ? 'border-yellow-400 animate-pulse animate-glow' 
+              : 'border-yellow-200 animate-float'
           }`}>
             {/* Inner circle with audio level */}
             <div 
               className={`w-full h-full rounded-full transition-all duration-100 flex items-center justify-center ${
-                isRecording ? 'bg-yellow-400' : 'bg-yellow-100'
+                isRecording ? 'bg-yellow-400 animate-glow' : 'bg-yellow-100'
               }`}
               style={{
                 transform: `scale(${0.8 + (audioLevel * 0.3)})`,
                 opacity: isRecording ? 0.8 + (audioLevel * 0.2) : 1
               }}
             >
-              <Mic className={`w-8 h-8 ${isRecording ? 'text-white' : 'text-yellow-500'}`} />
+              <Mic className={`w-8 h-8 transition-all duration-300 ${
+                isRecording 
+                  ? 'text-white animate-pulse' 
+                  : 'text-yellow-500 animate-float'
+              }`} />
             </div>
           </div>
+          
+          {/* Ripple effect when recording */}
+          {isRecording && (
+            <>
+              <div className="absolute inset-0 rounded-full border-2 border-yellow-400 animate-ping"></div>
+              <div className="absolute inset-0 rounded-full border border-yellow-300 animate-ping delay-300"></div>
+            </>
+          )}
         </div>
       </div>
 

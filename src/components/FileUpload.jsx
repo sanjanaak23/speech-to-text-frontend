@@ -79,10 +79,10 @@ const FileUpload = ({ onFileSelected, isLoading, disabled }) => {
   };
 
   return (
-    <div className="bg-gradient-to-br from-yellow-50 to-amber-50 rounded-2xl p-8 border border-yellow-200 shadow-lg">
-      <div className="text-center mb-6">
-        <h3 className="text-2xl font-bold text-gray-800 mb-2">📁 File Upload</h3>
-        <p className="text-gray-600">Upload an audio file to transcribe</p>
+    <div className="bg-gradient-to-br from-yellow-50/90 to-amber-50/90 backdrop-blur-sm rounded-2xl p-8 border border-yellow-200 shadow-lg hover-lift">
+      <div className="text-center mb-6 animate-fade-in">
+        <h3 className="text-2xl font-bold text-gray-800 mb-2 animate-bounce-in">📁 File Upload</h3>
+        <p className="text-gray-600 animate-fade-in delay-200">Upload an audio file to transcribe</p>
       </div>
 
       {!selectedFile ? (
