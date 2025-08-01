@@ -1,0 +1,221 @@
+/* Background and Layout */
+.app-container {
+  min-height: 100vh;
+  background-size: cover;
+  background-position: center;
+  background-attachment: fixed;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 2rem;
+}
+
+.content-card {
+  width: 100%;
+  max-width: 700px;
+  background-color: rgba(255, 255, 255, 0.7);
+  backdrop-filter: blur(8px);
+  border-radius: 16px;
+  padding: 2.5rem;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+  border: 2px solid rgba(255, 215, 0, 0.3);
+}
+
+.main-title {
+  font-size: 2.5rem;
+  color: #8B4513;
+  text-align: center;
+  margin-bottom: 2rem;
+  text-decoration: underline;
+  text-decoration-color: #DAA520;
+  text-underline-offset: 8px;
+}
+
+/* Sections */
+.upload-section,
+.recording-section,
+.audio-preview,
+.transcription-result {
+  background-color: rgba(255, 255, 255, 0.8);
+  border-radius: 12px;
+  padding: 1.5rem;
+  margin-bottom: 1.5rem;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease;
+}
+
+.upload-section:hover,
+.recording-section:hover,
+.audio-preview:hover,
+.transcription-result:hover {
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);
+  transform: translateY(-2px);
+}
+
+/* Buttons */
+.upload-btn,
+.record-btn,
+.stop-btn,
+.submit-btn,
+.clear-btn,
+.copy-btn {
+  padding: 0.8rem 1.5rem;
+  border: none;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.upload-btn {
+  background-color: #DAA520;
+  color: white;
+}
+
+.upload-btn:hover {
+  background-color: #B8860B;
+}
+
+.record-btn {
+  background-color: #DC143C;
+  color: white;
+}
+
+.record-btn:hover {
+  background-color: #B22222;
+}
+
+.record-btn:disabled {
+  background-color: #CCCCCC;
+  cursor: not-allowed;
+}
+
+.stop-btn {
+  background-color: #228B22;
+  color: white;
+}
+
+.stop-btn:hover {
+  background-color: #006400;
+}
+
+.submit-btn {
+  background-color: #8B4513;
+  color: white;
+  width: 100%;
+  padding: 1rem;
+  font-size: 1.1rem;
+  margin-top: 1rem;
+}
+
+.submit-btn:hover {
+  background-color: #A0522D;
+}
+
+.submit-btn:disabled {
+  background-color: #CCCCCC;
+  cursor: not-allowed;
+}
+
+.clear-btn {
+  background-color: #F5F5F5;
+  color: #8B4513;
+  margin-left: 1rem;
+}
+
+.clear-btn:hover {
+  background-color: #E0E0E0;
+}
+
+.copy-btn {
+  background-color: #8B4513;
+  color: white;
+  margin-top: 1rem;
+}
+
+.copy-btn:hover {
+  background-color: #A0522D;
+}
+
+/* File Info */
+.file-info {
+  display: flex;
+  align-items: center;
+  margin-top: 1rem;
+  color: #555;
+}
+
+/* Recording Status */
+.recording-status {
+  display: flex;
+  align-items: center;
+  margin-top: 1rem;
+  color: #DC143C;
+  font-weight: 600;
+}
+
+.recording-dot {
+  display: inline-block;
+  width: 12px;
+  height: 12px;
+  background-color: #DC143C;
+  border-radius: 50%;
+  margin-right: 8px;
+  animation: pulse 1.5s infinite;
+}
+
+@keyframes pulse {
+  0% { opacity: 1; }
+  50% { opacity: 0.5; }
+  100% { opacity: 1; }
+}
+
+/* Audio Preview */
+.audio-preview audio {
+  width: 100%;
+  border-radius: 8px;
+}
+
+/* Error Message */
+.error-message {
+  color: #DC143C;
+  background-color: rgba(220, 20, 60, 0.1);
+  padding: 1rem;
+  border-radius: 8px;
+  margin: 1.5rem 0;
+  border-left: 4px solid #DC143C;
+}
+
+/* Transcription Result */
+.transcription-result h2 {
+  color: #8B4513;
+  margin-bottom: 1rem;
+}
+
+.transcription-text {
+  white-space: pre-wrap;
+  background-color: rgba(255, 215, 0, 0.1);
+  padding: 1rem;
+  border-radius: 8px;
+  margin-top: 1rem;
+  border: 1px solid rgba(218, 165, 32, 0.3);
+}
+
+/* Spinner */
+.spinner {
+  border: 3px solid rgba(255, 255, 255, 0.3);
+  border-radius: 50%;
+  border-top: 3px solid white;
+  width: 20px;
+  height: 20px;
+  animation: spin 1s linear infinite;
+  margin-right: 10px;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
